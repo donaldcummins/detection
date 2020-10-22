@@ -17,3 +17,6 @@ This repository contains data and R code used to perform the analyses describe i
 | MIROC6          | MIROC        |
 | MRI-ESM2-0      | MRI          |
 | NorESM2-LM      | NCC          |
+
+# Observational datasets
+The raw observational datasets are located in the [observations](https://github.com/donaldcummins/detection/tree/main/observations) directory, alongside a [table of source URLs](https://github.com/donaldcummins/detection/blob/main/observations/SOURCES.md) with dates of access.
