@@ -1,5 +1,5 @@
 # Description
-This repository contains data and R code used to perform the analyses describe in the paper "More confident detection of climate change trends using physically-motivated error-correction regression models". The R code is original work and is licenced under the GNU General Public License v3.0.
+This repository contains data and R code used to perform the analyses in the paper "More confident detection of climate change trends using physically-motivated error-correction regression models". The R code is original work and is licenced under the GNU General Public License v3.0.
 
 # List of CMIP6 climate models and modelling centres
 | Model           | Institution  |
