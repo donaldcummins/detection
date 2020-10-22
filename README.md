@@ -18,5 +18,8 @@ This repository contains data and R code used to perform the analyses describe i
 | MRI-ESM2-0      | MRI          |
 | NorESM2-LM      | NCC          |
 
+# CMIP6 time series data
+Time series of annually-averaged historical global mean surface temperature from the 13 climate models in the table above are located in the CMIP6 directory.
+
 # Observational datasets
 The raw observational datasets are located in the [observations](https://github.com/donaldcummins/detection/tree/main/observations) directory, alongside a [table of source URLs](https://github.com/donaldcummins/detection/blob/main/observations/SOURCES.md) with dates of access.
