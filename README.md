@@ -8,12 +8,12 @@ You will also need to install libraries for reading NetCDF files. On Ubuntu Linu
 ```
 sudo apt install libnetcdf-dev
 ```
-The R required interface ```ncdf4``` can be installed from the R interpreter with
+The R interface ```ncdf4``` should be installed from the R interpreter with
 ```
 install.packages("ncdf4")
 ```
 
-Once you have downloaded this repository, the analysis can be replicated interactively by running the commands in [analysis.R](https://github.com/donaldcummins/detection/blob/main/R/analysis.R) in the same sequence as they appear in the file. Function definitions are sourced from [definitions.R](https://github.com/donaldcummins/detection/blob/main/R/definitions.R).
+Once you have cloned / downloaded this repository (```detection```), the analysis can be replicated interactively by running the commands in [analysis.R](https://github.com/donaldcummins/detection/blob/main/R/analysis.R) in the same sequence as they appear in the file. Function definitions are sourced from [definitions.R](https://github.com/donaldcummins/detection/blob/main/R/definitions.R).
 
 # Table of CMIP6 climate models and modelling centres
 | Model           | Institution  |
