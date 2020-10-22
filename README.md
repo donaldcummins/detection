@@ -2,7 +2,7 @@
 This repository contains data and R code used to perform the analysis in the paper "More confident detection of climate change trends using physically-motivated error-correction regression models". The R code is original work and is licenced under the GNU General Public License v3.0.
 
 # Replicating the analysis
-To replicate the analysis described in the paper, you will need a working R installation (version 4.0.2 or above). The latest version of the R runtime can be downloaded from [CRAN](https://cran.r-project.org/). The analysis can be replicated interactively by running the commands in [analysis.R](https://github.com/donaldcummins/detection/blob/main/R/analysis.R) in the same sequence as they appear in the file. Function definitions are sourced from [definitions.R](https://github.com/donaldcummins/detection/blob/main/R/definitions.R).
+To replicate the analysis described in the paper, you will need a working R installation (version 4.0.2 or above). The latest version of the R runtime can be downloaded from [CRAN](https://cran.r-project.org/). Having cloned the repository with ```git clone https://github.com/donaldcummins/detection```, the analysis can be replicated interactively by running the commands in [analysis.R](https://github.com/donaldcummins/detection/blob/main/R/analysis.R) in the same sequence as they appear in the file. Function definitions are sourced from [definitions.R](https://github.com/donaldcummins/detection/blob/main/R/definitions.R).
 
 # Table of CMIP6 climate models and modelling centres
 | Model           | Institution  |
