@@ -1,5 +1,5 @@
 # Description
-This repository contains data and R code used to perform the analyses describe in the paper "More confident detection of climate change trends using physically-motivated error-correction regression models".
+This repository contains data and R code used to perform the analyses describe in the paper "More confident detection of climate change trends using physically-motivated error-correction regression models". The R code is original work and is licenced under the GNU General Public License v3.0.
 
 # List of CMIP6 climate models and modelling centres
 | Model           | Institution  |
@@ -19,7 +19,7 @@ This repository contains data and R code used to perform the analyses describe i
 | NorESM2-LM      | NCC          |
 
 # CMIP6 time series data
-Time series of annually-averaged historical global mean surface temperature from the 13 climate models in the table above are located in the CMIP6 directory.
+Time series of annually-averaged historical global mean surface temperature from the 13 climate models in the table above are located in the [CMIP6](https://github.com/donaldcummins/detection/tree/main/CMIP6/historical/processed/tas) directory.
 
 # Observational datasets
 The raw observational datasets are located in the [observations](https://github.com/donaldcummins/detection/tree/main/observations) directory, alongside a [table of source URLs](https://github.com/donaldcummins/detection/blob/main/observations/SOURCES.md) with dates of access.
