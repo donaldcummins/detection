@@ -13,7 +13,7 @@ The R interface ```ncdf4``` should be installed from the R interpreter with
 install.packages("ncdf4")
 ```
 
-Once you have cloned / downloaded the```detection``` repository, the analysis can be replicated interactively by running the commands in [analysis.R](https://github.com/donaldcummins/detection/blob/main/R/analysis.R) in the same sequence as they appear in the file. Function definitions are sourced from [definitions.R](https://github.com/donaldcummins/detection/blob/main/R/definitions.R).
+Once you have cloned / downloaded the ```detection``` repository, the analysis can be replicated interactively by running the commands in [analysis.R](https://github.com/donaldcummins/detection/blob/main/R/analysis.R) in the same sequence as they appear in the file. Function definitions are sourced from [definitions.R](https://github.com/donaldcummins/detection/blob/main/R/definitions.R).
 
 # Table of CMIP6 climate models and modelling centres
 | Model           | Institution  |
