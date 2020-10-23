@@ -1,6 +1,8 @@
 # Description
 This repository contains data and R code used to perform the analysis in the paper "More confident detection of climate change trends using physically-motivated error-correction regression models". The R code is original work and is licenced under the GNU General Public License v3.0.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4121891.svg)](https://doi.org/10.5281/zenodo.4121891)
+
 # Replicating the analysis
 To replicate the analysis described in the paper, you will need a working R installation (version 4.0.2 or above). The latest version of the R runtime can be downloaded from [CRAN](https://cran.r-project.org/).
 
