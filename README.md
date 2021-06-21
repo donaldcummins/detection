@@ -30,3 +30,6 @@ Time series of annually-averaged global mean surface temperature in *historical*
 
 # Observational datasets
 The raw observational datasets are located in the [observations](https://github.com/donaldcummins/detection/tree/main/data-raw/observations) directory, alongside a [table of source URLs](https://github.com/donaldcummins/detection/blob/main/data-raw/observations/SOURCES.md) with dates of access.
+
+# Acknowledgements
+We acknowledge the World Climate Research Program's Working Group on Coupled Modelling, which is responsible for CMIP, and we thank the climate modelling groups for producing and making available their model output. The models used in this study and the respective modelling centres are listed above. For CMIP the U.S. Department of Energy's Program for Climate Model Diagnosis and Intercomparison provides coordinating support and led development of software infrastructure in partnership with the Global Organization for Earth System Science Portals.
