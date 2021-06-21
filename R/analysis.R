@@ -1,4 +1,4 @@
-# Copyright (C) 2020  Donald Cummins
+# Copyright (C) 2021  Donald Cummins
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,95 +13,130 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-## load function definitions
-source("definitions.R")
+## read in observations and CMIP6 data
+load("../data/observations.rda")
+load("../data/CMIP6.rda")
 
-## get list of processed .nc files
-processed.files <- list.files(
-  path = "../CMIP6/historical/processed/tas",
-  full.names = TRUE
-)
+## use HadCRUT5 as response variable
+y <- observations$hadcrut[31:165]
 
-## store list of climate models
-models <- c(
-  "ACCESS-ESM1-5",
-  "BCC-CSM2-MR",
-  "CanESM5",
-  "CESM2",
-  "CNRM-CM6-1",
-  "FGOALS-g3",
-  "GFDL-ESM4",
-  "GISS-E2-1-G",
-  "HadGEM3-GC31-LL",
-  "IPSL-CM6A-LR",
-  "MIROC6",
-  "MRI-ESM2-0",
-  "NorESM2-LM"
-)
+## extract names of CMIP6 GCMs
+models <- names(CMIP6$historical)
 
-## store ensembles in list
-ensembles <- store.ensembles(models)
+## take historical ensemble means
+x1 <- as.data.frame(sapply(models, function(model) {
+  rowMeans(CMIP6$historical[[model]])
+}))[31:165,]
 
-## calculate ensemble means for each model
-ensemble.means <- sapply(ensembles, function(ensemble) {
-  rowMeans(ensemble)[1:165] # 1850:2014
+## take hist-GHG ensemble means
+x2 <- as.data.frame(sapply(models, function(model) {
+  rowMeans(CMIP6$`hist-GHG`[[model]])
+}))[31:165,]
+
+## perform two-way static regressions
+regressions <- lapply(models, function(model) {
+  lm(y ~ x1[[model]] + x2[[model]])
+}); names(regressions) <- models
+
+## plot time series of static regression residuals
+sapply(models, function(model) {
+  plot.ts(regressions[[model]]$residuals, main = model, ylab = "residual")
+  abline(h = 0, lty = 2)
 })
 
-## calculate multi-model mean from 1880:2014
-multimodel.mean <- rowMeans(ensemble.means)[31:165]
+## check autocorrelation of static regression residuals
+sapply(models, function(model) {
+  acf(regressions[[model]]$residuals, main = model)
+})
 
-## import observational datasets
-observations <- data.frame(
-  ## Berkeley Earth land and ocean
-  berkeley.earth = read.table(
-    file = "../observations/Land_and_Ocean_summary.txt",
-    skip = 48
-  )[31:165, 2],
-  
-  ## Cowtan and Way 2.0
-  cowtan.and.way = read.table(
-    file = "../observations/had4_krig_annual_v2_0_0.txt"
-  )[31:165, 2],
-  
-  ## GISTEMP v4
-  gistemp  = as.numeric(read.csv(
-    file = "../observations/GLB.Ts+dSST.csv",
-    skip = 1
-  )$J.D[1:135]),
-  
-  ## HadCRUT4
-  hadcrut = read.table(
-    file = "../observations/HadCRUT.4.6.0.0.annual_ns_avg.txt"
-  )[31:165, 2],
-  
-  ## NOAAGlobalTemp v5
-  noaaglobaltemp = read.table(
-    file = "../observations/aravg.ann.land_ocean.90S.90N.v5.0.0.202008.asc"
-  )[1:135, 2]
+## perform (non-augmented) Dickey-Fuller regressions
+df.regressions <- lapply(models, function(model) {
+  z <- regressions[[model]]$residuals
+  n <- length(z) - 1
+  z.diff <- diff(z)
+  z1 <- z[1:n]
+  lm(z.diff ~ z1)
+}); names(df.regressions) <- models
+
+## check autocorrelation of Dickey-Fuller regression residuals
+sapply(models, function(model) {
+  acf(df.regressions[[model]]$residuals, main = model)
+})
+
+## extract Dickey-Fuller test statistics
+df.stats <- sapply(models, function(model) {
+  coef(summary(df.regressions[[model]]))["z1", "t value"]
+})
+
+## calculate 1%-level critical value from Table 3 of 2010 update of MacKinnon (1991)
+## https://www.econstor.eu/bitstream/10419/67744/1/616664753.pdf
+n <- 135
+df.crit <- -4.29374 - 14.4354/n - 33.195/(n^2) + 47.433/(n^3)
+
+## perform two-way dynamic regressions
+dregressions <- lapply(models, function(model) {
+  x1 <- x1[[model]]
+  x2 <- x2[[model]]
+  lm(y[2:n] ~ x1[2:n] + x2[2:n] + y[1:(n-1)] + x1[1:(n-1)] + x2[1:(n-1)])
+}); names(dregressions) <- models
+
+## plot time series of dynamic regression residuals
+sapply(models, function(model) {
+  plot.ts(dregressions[[model]]$residuals, main = model, ylab = "residual")
+  abline(h = 0, lty = 2)
+})
+
+## check autocorrelation of dynamic regression residuals
+sapply(models, function(model) {
+  acf(dregressions[[model]]$residuals, main = model)
+})
+
+## extract dynamic regression slope coefficients
+beta.dash <- sapply(models, function(model) {
+  dregressions[[model]]$coefficients[2:6]
+})
+
+## extract scaling factors (estimated using dynamic regression)
+M <- rbind(
+  c(1, 1, 0, 1, 1),
+  c(1, 0, 0, 1, 0)
 )
+f <- function(beta.dash) {
+  (M %*% beta.dash) / (1 - beta.dash[3])
+}
+beta.star <- apply(beta.dash, 2, f); row.names(beta.star) <- c("G", "OAN")
 
-## centre observational datasets by subtracting means
-observations <- data.frame(scale(observations, center = TRUE, scale = FALSE))
+## extract scaling factors  (estimated using static regression)
+beta <- sapply(models, function(model) {
+  beta <- unname(coef(regressions[[model]])[2:3])
+  c(G = beta[1] + beta[2], OAN = beta[1])
+})
 
-## extract names of observational datasets
-datasets <- names(observations)
+## extract covariance matrices of dynamic regression slope coefficients
+Sigma.dash <- lapply(models, function(model) {
+  vcov(dregressions[[model]])[2:6, 2:6]
+}); names(Sigma.dash) <- models
 
-## fit level regressions
-level.regressions <- lapply(observations, fit.level.regression)
+## estimate covariance matrices of scaling factors
+f.jacobian <- function(beta.dash) {
+  M / (1 - beta.dash[3]) + (M %*% beta.dash) %*% t(c(0, 0, (1 - beta.dash[3])^-2, 0, 0))
+}
+Sigma.star <- lapply(models, function(model) {
+  J <- f.jacobian(beta.dash[,model])
+  J %*% Sigma.dash[[model]] %*% t(J)
+}); names(Sigma.star) <- models
 
-## fit error correction models
-ecms <- lapply(level.regressions, fit.ecm)
+## calculate standard errors of scaling factors
+se.star <- sapply(models, function(model) {
+  se <- sqrt(diag(Sigma.star[[model]]))
+  c(G = se[1], OAN = se[2])
+})
 
-## fit null models
-null.models <- lapply(ecms, fit.null)
+## calculate GHG warming between 1880:1899 and 2005:2014
+`warming.hist-GHG.unscaled` <- colMeans(x2[126:135, ]) - colMeans(x2[1:20, ])
+`warming.hist-GHG` <- beta.star["G",] * `warming.hist-GHG.unscaled`
 
-## bootstrap null model sampling distributions for each dataset
-set.seed(44)
-bootstrap.distributions <- lapply(datasets, bootstrap.null)
-names(bootstrap.distributions) <- datasets
-save(bootstrap.distributions, file = "boot.rda")
-
-## assemble meta-bootstrap distribution
-load("boot.rda")
-bootstrap.distribution <- Reduce(rbind, bootstrap.distributions)
-
+## calculate historical warming between 1880:1899 and 2005:2014
+warming.historical.unscaled <- colMeans(x1[126:135, ]) - colMeans(x1[1:20, ])
+warming.historical <- `warming.hist-GHG` +
+  beta.star["OAN",] * (warming.historical.unscaled - `warming.hist-GHG.unscaled`)
