@@ -1,5 +1,5 @@
 # Description
-This repository contains data and R code used to perform the analysis in the paper "Could detection and attribution of climate change trends be spurious regression?". The R code is original work and is licenced under the GNU General Public License v3.0.
+This repository contains data and R code used to perform the analysis in the paper "Could detection and attribution of climate change trends be spurious regression?".
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4121890.svg)](https://doi.org/10.5281/zenodo.4121890)
 
